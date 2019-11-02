@@ -1,3 +1,4 @@
+CROSS_COMPILE ?=
 obj-y = code16.o entry.o main.o string.o printf.o cstart.o fw_cfg.o
 obj-y += linuxboot.o malloc.o tables.o hwsetup.o pci.o code32seg.o
 obj-y += mptable.o
@@ -25,9 +26,9 @@ autodepend-flags = -MMD -MF .deps/cc-$(patsubst %/,%,$(dir $*))-$(notdir $*).d
 
 .PRECIOUS: %.o
 %.o: %.c
-	$(CC) $(CFLAGS) $(BIOS_CFLAGS) $($@-cflags) -c -s $< -o $@
+	$(CROSS_COMPILE)$(CC) $(CFLAGS) $(BIOS_CFLAGS) $($@-cflags) -c -s $< -o $@
 %.o: %.S
-	$(CC) $(CFLAGS) $(BIOS_CFLAGS) -c -s $< -o $@
+	$(CROSS_COMPILE)$(CC) $(CFLAGS) $(BIOS_CFLAGS) -c -s $< -o $@
 
 bios.bin.elf: $(obj-y) flat.lds
 	$(LD) -T flat.lds -o bios.bin.elf $(obj-y)
